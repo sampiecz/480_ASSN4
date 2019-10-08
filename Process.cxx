@@ -11,8 +11,9 @@
 #include "Process.h"
 
 
-int main()
+// Constructor that sets the name
+Process::Process(const string& processName)
 {
-    // new Process("process name");
-    return 0;
+    this->processName = processName;
 }
+

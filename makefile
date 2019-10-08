@@ -4,17 +4,16 @@
 # DATE DUE:   10/11/19
 #
 
-# Compiler variables
 CCFLAGS = -ggdb -Wall -std=c++11
 
-# Rule to link object code files to create executable file
-Assign4: Assign4.o
-	g++ $(CCFLAGS) -o Assign4 Assign4.o
+Assign4: Assign4.o Process.o
+	g++ $(CCFLAGS) -o Assign4 Assign4.o Process.o
 
-# Rule to compile source code file to object code
-Assign4.o: Assign4.cxx
+Assign4.o: Assign4.cxx Process.h
 	g++ $(CCFLAGS) -c Assign4.cxx
 
-# Pseudo-target to remove object code and executable files
+Process.o: Process.cxx Process.h
+	g++ $(CCFLAGS) -c Process.cxx
+
 clean:
 	-rm *.o Assign4
