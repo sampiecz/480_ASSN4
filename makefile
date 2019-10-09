@@ -6,14 +6,17 @@
 
 CCFLAGS = -ggdb -Wall -std=c++11
 
-Assign4: Assign4.o Process.o
-	g++ $(CCFLAGS) -o Assign4 Assign4.o Process.o
+Assign4: Assign4.o Process.o Queue.o
+	g++ $(CCFLAGS) -o Assign4 Assign4.o Process.o Queue.o
 
-Assign4.o: Assign4.cxx Process.h
+Assign4.o: Assign4.cxx Process.h Queue.h
 	g++ $(CCFLAGS) -c Assign4.cxx
 
 Process.o: Process.cxx Process.h
 	g++ $(CCFLAGS) -c Process.cxx
+
+Queue.o: Queue.cxx Queue.h
+	g++ $(CCFLAGS) -c Queue.cxx
 
 clean:
 	-rm *.o Assign4
