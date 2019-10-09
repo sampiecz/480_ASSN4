@@ -24,11 +24,10 @@ using std::getline;
 using std::istringstream;
 using std::ifstream;
 
-int main()
+void processFile(const string& filename)
 {
-
     // Instantiate infile and line parser.
-    ifstream infile("data4.txt");
+    ifstream infile(filename);
     bool stopHere = false;
     string line;
     
@@ -103,6 +102,31 @@ int main()
 
 		}
 
-    return 0;
+}
+
+int main()
+{
+  // Program requires 4 queues 
+  //
+  // This Queue is FIFO.
+  //
+  // new Queue(Entry);
+  //
+  //
+  // These are priority Queues when a process is popped off
+  // it is the highest priority process. If two processes
+  // are equallly important, the older process should go first.
+  //
+  // new PriorityQueue(Ready);
+  // new PriorityQueue(Input);
+  // new PriorityQueue(Output);
+  //
+  // process * Active;
+  // process * IActive;
+  // process * OActive;
+
+  processFile("data4.txt");
+
+  return 0;
 
 }
