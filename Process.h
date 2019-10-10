@@ -12,19 +12,39 @@
 #define PROCESS_H
 
 #include <string>
+#include <vector>
+
+using std::vector;
 using std::string;
+
+struct History 
+{
+
+  string letter;
+  int value;
+
+  History(string letter, int value)
+  {
+    this->letter = letter;
+    this->value = value;
+  }
+
+};
+
 
 class Process
 {
+
     public:
         Process(const string&);
-
+        virtual ~Process();
+        void print();
     private:
 				string processName;
         int priority;
         int processId;
         int arrivalTime;
-        string history[10];
+        vector<History>* history;
         int sub;
         int cpuTimer;
         int IOTimer;
@@ -34,6 +54,9 @@ class Process
         int CPUCount;
         int ICount;
         int OCount;
+
 };
+
+
 
 #endif

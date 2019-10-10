@@ -9,7 +9,10 @@
  Purpose: Priority Scheduling Simulation. 
  ************************************************************/
 #include "Process.h"
+#include <iostream>
 
+using std::cout;
+using std::endl;
 
 // Constructor that sets the name
 Process::Process(const string& processName)
@@ -17,3 +20,11 @@ Process::Process(const string& processName)
     this->processName = processName;
 }
 
+Process::~Process()
+{
+}
+
+void Process::print()
+{
+  cout << this->processName << endl;
+}
