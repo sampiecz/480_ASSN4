@@ -1,12 +1,12 @@
 /***********************************************************
- CSCI 480 - Assignment 4 - Fall 2019
- 
- Progammer: Sam Piecz
- Z-ID: Z1732715
- Section: 2 
- TA: Jingwan Li  
- Date Due: Oct 11, 2019 
- Purpose: Priority Scheduling Simulation. 
+CSCI 480 - Assignment 4 - Fall 2019
+
+Progammer: Sam Piecz
+Z-ID: Z1732715
+Section: 2 
+TA: Jingwan Li  
+Date Due: Oct 11, 2019 
+Purpose: Priority Scheduling Simulation. 
  ************************************************************/
 #include "Process.h"
 #include <iostream>
@@ -26,95 +26,108 @@ using std::getline;
 using std::istringstream;
 using std::ifstream;
 using std::stringstream;
+using std::stoi;
 
 vector<string> stringToVector(const string& str)
 {
-    string buf;                 // Have a buffer string
-    stringstream ss(str);       // Insert the string into a stream
-    vector<string> tokens; // Create vector to hold our words
-    while (ss >> buf)
-		{
-        tokens.push_back(buf);
-		}
+  string buf;                 // Have a buffer string
+  stringstream ss(str);       // Insert the string into a stream
+  vector<string> tokens; // Create vector to hold our words
+  while (ss >> buf)
+  {
+    tokens.push_back(buf);
+  }
 
-		return tokens;
+  return tokens;
 }
 
 void processFile(const string& filename)
 {
-    // Instantiate infile and line parser.
-    vector<Process*> processes;
-    ifstream infile(filename);
-    bool stopHere = false;
-    string line;
-    
-    // While we have a line in the file iterate. 
-		while (getline(infile, line) && !stopHere)
-		{
+  // Instantiate infile and line parser.
+  vector<Process*> processes;
+  ifstream infile(filename);
+  bool stopHere = false;
+  string line;
 
-        // Stop when loudly asked to stop.
-        if (line.find("STOPHERE") != string::npos)
-        {
-          stopHere = true;
-        }
+  // While we have a line in the file iterate. 
+  while (getline(infile, line) && !stopHere)
+  {
 
-        // Variables to help process loop
-        bool cpuBurstData;
-        bool freshLine = true;
-        string processName;
-
-        // Get the line, that pesky bugger.
-				istringstream iss(line);
-
-        // Process name or cpu burst data? 
-        if (line.length() >= 20)
-        {
-          cpuBurstData = true;
-        }
-        else
-        {
-          cpuBurstData = false;
-        }
-
-
-        // Loop line by line.
-        if (!stopHere)
-        {
-
-					// if burst data assign data to most recent process
-          if (cpuBurstData)
-          {
-							for (auto x : stringToVector(line)) 
-							{
-								cout << x << endl;
-							}
-          }
-					// if not burst then new process create it
-					else
-					{
-						int count = 0;
-						for (auto x : stringToVector(line)) 
-						{
-							if (count == 0)
-							{
-								processes.push_back(new Process(x));
-							}
-							count++;
-						}
-					}
-          
-        }
-
-		}
-
-    // Print out processes for testing purposes
-    // need to move this into queue class print method
-    for (auto x : processes)
+    // Stop when loudly asked to stop.
+    if (line.find("STOPHERE") != string::npos)
     {
-      cout << "Process: ";
-      x->print();
-      cout << "\n";
+      stopHere = true;
     }
+
+    // Variables to help process loop
+    bool cpuBurstData;
+    string processName;
+
+    // Get the line, that pesky bugger.
+    istringstream iss(line);
+
+    // Process name or cpu burst data? 
+    if (line.length() >= 20)
+    {
+      cpuBurstData = true;
+    }
+    else
+    {
+      cpuBurstData = false;
+    }
+
+
+    // Loop line by line.
+    if (!stopHere)
+    {
+
+      // if burst data assign data to most recent process
+      if (cpuBurstData)
+      {
+        for (auto x : stringToVector(line)) 
+        {
+          cout << x << endl;
+        }
+      }
+      // if not burst then new process create it
+      else
+      {
+        int count = 0;
+        string theName, thePriority, theArrivalTime;
+        for (auto x : stringToVector(line)) 
+        {
+          if (count == 0)
+          {
+            theName = x;
+          }
+          else if (count == 1)
+          {
+            thePriority = x;
+          }
+          else if (count == 2)
+          {
+            theArrivalTime = x;
+          }
+
+          count++;
+        }
+
+        processes.push_back(new Process(theName, stoi(thePriority), stoi(theArrivalTime)));
+
+      }
+
+    }
+
+  }
+
+  // Print out processes for testing purposes
+  // need to move this into queue class print method
+  for (auto x : processes)
+  {
+    cout << "Process: ";
+    x->print();
+    cout << "\n";
+  }
 
 }
 
