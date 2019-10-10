@@ -7,7 +7,7 @@ Section: 2
 TA: Jingwan Li  
 Date Due: Oct 11, 2019 
 Purpose: Priority Scheduling Simulation. 
- ************************************************************/
+************************************************************/
 #include "Process.h"
 #include <iostream>
 #include <fstream>
@@ -46,6 +46,7 @@ void processFile(const string& filename)
   // Instantiate infile and line parser.
   vector<Process*> processes;
   ifstream infile(filename);
+  int processCount = -1;
   bool stopHere = false;
   string line;
 
@@ -61,7 +62,6 @@ void processFile(const string& filename)
 
     // Variables to help process loop
     bool cpuBurstData;
-    string processName;
 
     // Get the line, that pesky bugger.
     istringstream iss(line);
@@ -80,43 +80,58 @@ void processFile(const string& filename)
     // Loop line by line.
     if (!stopHere)
     {
-
       // if burst data assign data to most recent process
       if (cpuBurstData)
       {
-        for (auto x : stringToVector(line)) 
+        cout << "cpu burst data" << endl;
+        string letter;
+        int value;
+        int count1 = 0;
+
+        for (string x : stringToVector(line)) 
         {
-          cout << x << endl;
+          if (count1 == 0)
+          {
+            letter = x;
+            cout << "Letter: " << letter << endl;
+          }
+          else if (count1 == 1)
+          {
+            value = stoi(x);
+            cout << "Value: " << value << endl;
+            count1 = -1;
+          }
+          count1++;
         }
+
       }
       // if not burst then new process create it
       else
       {
-        int count = 0;
         string theName, thePriority, theArrivalTime;
+        cout << "not burst data" << endl;
+        int count = 0;
         for (auto x : stringToVector(line)) 
         {
           if (count == 0)
           {
             theName = x;
           }
-          else if (count == 1)
+          if (count == 1)
           {
             thePriority = x;
           }
-          else if (count == 2)
+          if (count == 2)
           {
             theArrivalTime = x;
           }
-
           count++;
         }
-
         processes.push_back(new Process(theName, stoi(thePriority), stoi(theArrivalTime)));
-
       }
-
     }
+
+    processCount++;
 
   }
 
@@ -128,6 +143,7 @@ void processFile(const string& filename)
     x->print();
     cout << "\n";
   }
+
 
 }
 

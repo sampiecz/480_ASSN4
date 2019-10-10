@@ -37,6 +37,7 @@ class Process
 
     public:
         Process(const string&, int, int);
+        void setHistory(const string&, int);
         virtual ~Process();
         void print();
     private:

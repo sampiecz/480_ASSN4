@@ -22,6 +22,12 @@ Process::Process(const string& processName, int priority, int arrivalTime)
     this->arrivalTime = arrivalTime;
 }
 
+void Process::setHistory(const string& letter, int value)
+{
+  History* history = new History(letter, value);
+  this->history->push_back(*history);
+}
+
 Process::~Process()
 {
 }
