@@ -15,18 +15,35 @@
 #include <string.h>
 #include <string>
 #include <stdio.h>
+#include <vector>
 
 using std::string;
+using std::vector;
 using std::endl;
 using std::cout;
 using std::cerr;
 using std::getline;
 using std::istringstream;
 using std::ifstream;
+using std::stringstream;
+
+vector<string> stringToVector(const string& str)
+{
+    string buf;                 // Have a buffer string
+    stringstream ss(str);       // Insert the string into a stream
+    vector<string> tokens; // Create vector to hold our words
+    while (ss >> buf)
+		{
+        tokens.push_back(buf);
+		}
+
+		return tokens;
+}
 
 void processFile(const string& filename)
 {
     // Instantiate infile and line parser.
+    vector<Process*> processes;
     ifstream infile(filename);
     bool stopHere = false;
     string line;
@@ -50,7 +67,7 @@ void processFile(const string& filename)
 				istringstream iss(line);
 
         // Process name or cpu burst data? 
-        if (line.length() >= 17)
+        if (line.length() >= 20)
         {
           cpuBurstData = true;
         }
@@ -59,48 +76,45 @@ void processFile(const string& filename)
           cpuBurstData = false;
         }
 
-        cout << "It's a line!" << endl;
 
         // Loop line by line.
         if (!stopHere)
         {
 
-          for (auto x : line)
+					// if burst data assign data to most recent process
+          if (cpuBurstData)
           {
-
-            // If not data, and fresh line generate process
-            if (cpuBurstData == false && freshLine == true)
-            {
-              cout << "New process: " << x << endl;
-              new Process(processName);
-            }
-            // If we have cpuBurstData use process setters 
-            else if (cpuBurstData)
-            {
-              // Switch case for each char? 
-              cout << "Burst data: " << x << endl;
-            }
-            // If cpuBurstData isn't true must be process name
-            else if (cpuBurstData == false)
-            {
-              cout << "Process name: " << x << endl;
-              processName += x; 
-            }
-            // Something is broken
-            else
-            {
-              cerr << "ERROR" << endl; 
-              exit(-1);
-            }
-
-            // Reset fresh line, not first char anymore
-            freshLine = false;
-
+							for (auto x : stringToVector(line)) 
+							{
+								cout << x << endl;
+							}
           }
-
+					// if not burst then new process create it
+					else
+					{
+						int count = 0;
+						for (auto x : stringToVector(line)) 
+						{
+							if (count == 0)
+							{
+								processes.push_back(new Process(x));
+							}
+							count++;
+						}
+					}
+          
         }
 
 		}
+
+    // Print out processes for testing purposes
+    // need to move this into queue class print method
+    for (auto x : processes)
+    {
+      cout << "Process: ";
+      x->print();
+      cout << "\n";
+    }
 
 }
 
