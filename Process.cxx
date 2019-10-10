@@ -15,9 +15,11 @@ using std::cout;
 using std::endl;
 
 // Constructor that sets the name
-Process::Process(const string& processName)
+Process::Process(const string& processName, int priority, int arrivalTime)
 {
     this->processName = processName;
+    this->priority = priority;
+    this->arrivalTime = arrivalTime;
 }
 
 Process::~Process()
@@ -26,5 +28,8 @@ Process::~Process()
 
 void Process::print()
 {
-  cout << this->processName << endl;
+  cout << "\n";
+  cout << "-name: " << this->processName << endl;
+  cout << "-priority: " << this->priority << endl;
+  cout << "-arrivalTime: " << this->arrivalTime<< endl;
 }

@@ -36,7 +36,7 @@ class Process
 {
 
     public:
-        Process(const string&);
+        Process(const string&, int, int);
         virtual ~Process();
         void print();
     private:
