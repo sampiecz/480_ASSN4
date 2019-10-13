@@ -59,4 +59,9 @@ void Process::print()
   cout << "-name: " << this->processName << endl;
   cout << "-priority: " << this->priority << endl;
   cout << "-arrivalTime: " << this->arrivalTime<< endl;
+  cout << "- History: " << endl;
+  for ( auto x : this->history)
+  {
+    cout << "Letter: " << x.letter << " Value: " << x.value << endl;
+  }
 }
