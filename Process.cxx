@@ -10,22 +10,33 @@
  ************************************************************/
 #include "Process.h"
 #include <iostream>
+#include <vector>
+#include <string>
 
 using std::cout;
 using std::endl;
+using std::vector;
+using std::string;
 
-// Constructor that sets the name
-Process::Process(const string& processName, int priority, int arrivalTime)
+void Process::setHistory(const string& letter, int value, int index)
 {
-    this->processName = processName;
-    this->priority = priority;
-    this->arrivalTime = arrivalTime;
+  History* theHistory = new History(letter, value);
+  history[index] = *theHistory;
 }
 
-void Process::setHistory(const string& letter, int value)
+void Process::setName(const string& name)
 {
-  History* history = new History(letter, value);
-  this->history->push_back(*history);
+  this->processName = name;
+}
+
+void Process::setPriority(int priority)
+{
+  this->priority = priority;
+}
+
+void Process::setArrivalTime(int arrivalTime)
+{
+  this->arrivalTime = arrivalTime;
 }
 
 Process::~Process()

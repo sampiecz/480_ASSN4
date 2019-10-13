@@ -37,15 +37,18 @@ class Process
 
     public:
         Process(const string&, int, int);
-        void setHistory(const string&, int);
+        void setHistory(const string&, int, int);
+        void setName(const string&);
+        void setArrivalTime(int);
+        void setPriority(int);
         virtual ~Process();
         void print();
     private:
+        History history [10];
 				string processName;
         int priority;
         int processId;
         int arrivalTime;
-        vector<History>* history;
         int sub;
         int cpuTimer;
         int IOTimer;

@@ -80,35 +80,11 @@ void processFile(const string& filename)
     // Loop line by line.
     if (!stopHere)
     {
-      // if burst data assign data to most recent process
-      if (cpuBurstData)
-      {
-        cout << "cpu burst data" << endl;
-        string letter;
-        int value;
-        int count1 = 0;
 
-        for (string x : stringToVector(line)) 
-        {
-          if (count1 == 0)
-          {
-            letter = x;
-            cout << "Letter: " << letter << endl;
-          }
-          else if (count1 == 1)
-          {
-            value = stoi(x);
-            cout << "Value: " << value << endl;
-            count1 = -1;
-          }
-          count1++;
-        }
-
-      }
+      string theName, thePriority, theArrivalTime;
       // if not burst then new process create it
-      else
+      if (!cpuBurstData)
       {
-        string theName, thePriority, theArrivalTime;
         cout << "not burst data" << endl;
         int count = 0;
         for (auto x : stringToVector(line)) 
@@ -127,7 +103,36 @@ void processFile(const string& filename)
           }
           count++;
         }
-        processes.push_back(new Process(theName, stoi(thePriority), stoi(theArrivalTime)));
+        Process* theProcess = new Process(theName, stoi(thePriority), stoi(theArrivalTime)); 
+        processes.push_back(theProcess);
+      }
+      // if burst data assign data to most recent process
+      else 
+      {
+        cout << "cpu burst data" << endl;
+        string letter;
+        int value;
+        int count1 = 0;
+        int trueCount = 0;
+
+        for (string x : stringToVector(line)) 
+        {
+          if (count1 == 0)
+          {
+            letter = x;
+            cout << "Letter: " << letter << endl;
+          }
+          else if (count1 == 1)
+          {
+            value = stoi(x);
+            cout << "Value: " << value << endl;
+            count1 = -1;
+            processes[processCount]->setHistory(letter, value, trueCount);
+          }
+          count1++;
+          trueCount++;
+        }
+
       }
     }
 
