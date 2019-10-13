@@ -23,12 +23,6 @@ struct History
   string letter;
   int value;
 
-  History(string letter, int value)
-  {
-    this->letter = letter;
-    this->value = value;
-  }
-
 };
 
 
@@ -36,7 +30,7 @@ class Process
 {
 
     public:
-        Process(const string&, int, int);
+        Process();
         void setHistory(const string&, int, int);
         void setName(const string&);
         void setArrivalTime(int);

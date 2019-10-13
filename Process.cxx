@@ -18,10 +18,20 @@ using std::endl;
 using std::vector;
 using std::string;
 
+Process::Process()
+{
+}
+
 void Process::setHistory(const string& letter, int value, int index)
 {
-  History* theHistory = new History(letter, value);
-  history[index] = *theHistory;
+  cout << "Creating history..." << endl; 
+  History theHistory;
+  cout << "Setting history..." << endl;
+  theHistory.letter = letter;
+  theHistory.value = value;
+  cout << "Storing history in process..." << endl;
+  history[index] = theHistory;
+  cout << "Successfully stored in history." << endl;
 }
 
 void Process::setName(const string& name)

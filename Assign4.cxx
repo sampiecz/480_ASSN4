@@ -103,8 +103,18 @@ void processFile(const string& filename)
           }
           count++;
         }
-        Process* theProcess = new Process(theName, stoi(thePriority), stoi(theArrivalTime)); 
+
+				// Create new process and set vars
+        Process* theProcess = new Process(); 
+				theProcess->setName(theName);
+				theProcess->setPriority(stoi(thePriority));
+				theProcess->setArrivalTime(stoi(theArrivalTime));
         processes.push_back(theProcess);
+        processCount++;
+        cout << "Process print: " << endl; 
+        theProcess->print();
+        cout << "Processes print: " << endl; 
+        processes[processCount]->print();
       }
       // if burst data assign data to most recent process
       else 
@@ -128,15 +138,14 @@ void processFile(const string& filename)
             cout << "Value: " << value << endl;
             count1 = -1;
             processes[processCount]->setHistory(letter, value, trueCount);
+            trueCount++;
           }
           count1++;
-          trueCount++;
         }
 
       }
     }
 
-    processCount++;
 
   }
 
@@ -148,7 +157,6 @@ void processFile(const string& filename)
     x->print();
     cout << "\n";
   }
-
 
 }
 
