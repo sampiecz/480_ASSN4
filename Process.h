@@ -38,7 +38,6 @@ class Process {
     int arrivalTime;
     History history [10];
     int sub;
-  private:
     string processName;
     int priority;
     int processId;

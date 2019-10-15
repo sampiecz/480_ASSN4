@@ -119,6 +119,7 @@ vector<Process*> processFile(const string& filename)
         theProcess->print();
         cout << "Processes print: " << endl; 
         processes[processCount]->print();
+
       }
       // if burst data assign data to most recent process
       else 
@@ -169,13 +170,14 @@ queue<Process*> loadQueue(vector<Process*> _processes)
 
 int main()
 {
-  // Instantiate vars.
+  // Constants
   int MAX_TIME = 500;
   int IN_PLAY = 6;
   int QUEUE_SIZE = 20;
   int ARRAY_SIZE = 10;
   int HOW_OFTEN = 25;
-  int TIMER = 0;
+
+  // Instantiate vars.
   queue<Process*> entryQueue;
   priority_queue<Process*> Ready;
   priority_queue<Process*> Input;
@@ -183,37 +185,32 @@ int main()
   Process* Active;
   Process* IActive;
   Process* OActive;
+  int timer = 0;
+  int processesInUse = 0;
+
 
   // Process file, generate processes, and pack into queue.
   entryQueue = loadQueue(processFile("data4.txt"));
 		
-	/*
-	while(!entryQueue.empty())
-	{
-		entryQueue.front()->print();
-		entryQueue.pop();
-	}
-	*/
-
   // 3. 
-  while(TIMER < MAX_TIME)
+  while(timer < MAX_TIME)
   {
 		
 		// a.
     if (entryQueue.size() < IN_PLAY)
     {
-      if (entryQueue->front()->arrivalTime <= TIMER)
+      if (entryQueue.front()->arrivalTime > timer)
       {
-        Ready->push(entryQueue->front());
+        Ready.push(entryQueue.front());
       }
     }
 
 		// b.
     if (Active == NULL)
     {
-      if (!Ready->empty())
+      if (Ready.empty())
       {
-				TIMER++;
+				timer++;
 			  continue;	
       }
     }
@@ -222,16 +219,15 @@ int main()
 		{
 			if (Active->history[Active->sub].letter == "I")
 			{
-				Input.push_back(Active);	
+				Input.push(Active);	
 			}
 			else if (Active->history[Active->sub].letter == "O")
 			{
-				Output.push_back(Active);	
+				Output.push(Active);	
 			}
 			else if (Active->history[Active->sub].letter == "N")
 			{
-				// terminate? how?
-				Active->incrementSub();
+				delete Active;
 				continue;
 			}
 			Active->incrementSub();
@@ -240,29 +236,41 @@ int main()
 		// d.
 		if (IActive == NULL)
 		{
-			// e.
 			if (!Input.empty())
 			{
-				Ready.push_back(Input.front());
-				Input.pop();
+				IActive = Input.front();	
+			}
+		}
+		// e.
+		else	
+		{
+			if (IActive->sub == 9)
+			{
+				Ready.push(IActive);
 			}
 		}
 
 		// f.
 		if (OActive == NULL)
 		{
-			// g.
-			if (!OActive.empty())
+			if (!Output->empty())
 			{
-				Ready.push_back(OActive.front());
-				OActive.pop();
+				OActive = Output.front();
+			}
+		}
+		// g.
+		else 
+		{
+			if (OActive->sub == 9)
+			{
+				Ready.push(OActive);
 			}
 		}
 
-    TIMER++;
+    timer++;
 
 		// h.
-		if ( TIMER % HOW_OFTEN)
+		if ( timer % HOW_OFTEN)
 		{
 			// call prints
 			if (Active != NULL)
@@ -278,25 +286,25 @@ int main()
 				OActive->print();
 			}
 
-			while (entryQueue)
+			while (!entryQueue.empty())
 			{
-				entryQueue->front()->print();
-				entryQueue->pop();
+				entryQueue.front()->print();
+				entryQueue.pop();
 			}
 
-			while (Ready)
+			while (!Ready.empty())
 			{
-				Ready->top()->print();
-				Ready->pop();
+				Ready.top()->print();
+				Ready.pop();
 			}
 
-			while (Input)
+			while (!Input.empty())
 			{
 				Input->top()->print();
 				Input->pop();
 			}
 
-			while (Output)
+			while (!Output.empty())
 			{
 				Output->top()->print();
 				Output->pop();
