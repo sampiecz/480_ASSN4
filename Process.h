@@ -19,42 +19,37 @@ using std::string;
 
 struct History 
 {
-
   string letter;
   int value;
-
 };
 
 
-class Process
-{
-
-    public:
-        Process();
-        void setHistory(const string&, int, int);
-        void setName(const string&);
-        void setArrivalTime(int);
-        void setPriority(int);
-        virtual ~Process();
-        void print();
-    private:
-        History history [10];
-				string processName;
-        int priority;
-        int processId;
-        int arrivalTime;
-        int sub;
-        int cpuTimer;
-        int IOTimer;
-        int CPUTotal;
-        int ITotal;
-        int OTotal;
-        int CPUCount;
-        int ICount;
-        int OCount;
-
+class Process {
+  public:
+    Process();
+    void setHistory(const string&, int, int);
+    void setName(const string&);
+    void setArrivalTime(int);
+    void setPriority(int);
+    void setPID(int);
+    void incrementSub();
+    virtual ~Process();
+    void print();
+    int arrivalTime;
+    History history [10];
+    int sub;
+  private:
+    string processName;
+    int priority;
+    int processId;
+    int cpuTimer;
+    int IOTimer;
+    int CPUTotal;
+    int ITotal;
+    int OTotal;
+    int CPUCount;
+    int ICount;
+    int OCount;
 };
-
-
 
 #endif

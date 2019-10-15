@@ -5,8 +5,7 @@ Progammer: Sam Piecz
 Z-ID: Z1732715
 Section: 2 
 TA: Jingwan Li  
-Date Due: Oct 11, 2019 
-Purpose: Priority Scheduling Simulation. 
+Date Due: Oct 11, 2019 Purpose: Priority Scheduling Simulation. 
 ************************************************************/
 #include "Process.h"
 #include <iostream>
@@ -16,6 +15,7 @@ Purpose: Priority Scheduling Simulation.
 #include <string>
 #include <stdio.h>
 #include <vector>
+#include <queue>
 
 using std::string;
 using std::vector;
@@ -27,6 +27,8 @@ using std::istringstream;
 using std::ifstream;
 using std::stringstream;
 using std::stoi;
+using std::queue;
+using std::priority_queue;
 
 vector<string> stringToVector(const string& str)
 {
@@ -41,7 +43,7 @@ vector<string> stringToVector(const string& str)
   return tokens;
 }
 
-void processFile(const string& filename)
+vector<Process*> processFile(const string& filename)
 {
   // Instantiate infile and line parser.
   vector<Process*> processes;
@@ -85,6 +87,7 @@ void processFile(const string& filename)
       // if not burst then new process create it
       if (!cpuBurstData)
       {
+
         cout << "not burst data" << endl;
         int count = 0;
         for (auto x : stringToVector(line)) 
@@ -109,6 +112,7 @@ void processFile(const string& filename)
 				theProcess->setName(theName);
 				theProcess->setPriority(stoi(thePriority));
 				theProcess->setArrivalTime(stoi(theArrivalTime));
+        theProcess->setPID(processCount);
         processes.push_back(theProcess);
         processCount++;
         cout << "Process print: " << endl; 
@@ -146,42 +150,161 @@ void processFile(const string& filename)
       }
     }
 
-
   }
 
-  // Print out processes for testing purposes
-  // need to move this into queue class print method
-  for (auto x : processes)
-  {
-    cout << "Process: ";
-    x->print();
-    cout << "\n";
-  }
+  return processes;
+
+}
+
+queue<Process*> loadQueue(vector<Process*> _processes)
+{
+
+  queue<Process*> _queue;
+  for (auto x : _processes)
+    _queue.push(x);
+
+  return _queue;
 
 }
 
 int main()
 {
-  // Program requires 4 queues 
-  //
-  // This Queue is FIFO.
-  //
-  // new Queue(Entry);
-  //
-  //
-  // These are priority Queues when a process is popped off
-  // it is the highest priority process. If two processes
-  // are equallly important, the older process should go first.
-  //
-  // new PriorityQueue(Ready);
-  // new PriorityQueue(Input);
-  // new PriorityQueue(Output);
-  //
-  // process * Active;
-  // process * IActive;
-  // process * OActive;
+  // Instantiate vars.
+  int MAX_TIME = 500;
+  int IN_PLAY = 6;
+  int QUEUE_SIZE = 20;
+  int ARRAY_SIZE = 10;
+  int HOW_OFTEN = 25;
+  int TIMER = 0;
+  queue<Process*> entryQueue;
+  priority_queue<Process*> Ready;
+  priority_queue<Process*> Input;
+  priority_queue<Process*> Output;
+  Process* Active;
+  Process* IActive;
+  Process* OActive;
 
-  processFile("data4.txt");
+  // Process file, generate processes, and pack into queue.
+  entryQueue = loadQueue(processFile("data4.txt"));
+		
+	/*
+	while(!entryQueue.empty())
+	{
+		entryQueue.front()->print();
+		entryQueue.pop();
+	}
+	*/
+
+  // 3. 
+  while(TIMER < MAX_TIME)
+  {
+		
+		// a.
+    if (entryQueue.size() < IN_PLAY)
+    {
+      if (entryQueue->front()->arrivalTime <= TIMER)
+      {
+        Ready->push(entryQueue->front());
+      }
+    }
+
+		// b.
+    if (Active == NULL)
+    {
+      if (!Ready->empty())
+      {
+				TIMER++;
+			  continue;	
+      }
+    }
+		// c.
+		else
+		{
+			if (Active->history[Active->sub].letter == "I")
+			{
+				Input.push_back(Active);	
+			}
+			else if (Active->history[Active->sub].letter == "O")
+			{
+				Output.push_back(Active);	
+			}
+			else if (Active->history[Active->sub].letter == "N")
+			{
+				// terminate? how?
+				Active->incrementSub();
+				continue;
+			}
+			Active->incrementSub();
+		}
+
+		// d.
+		if (IActive == NULL)
+		{
+			// e.
+			if (!Input.empty())
+			{
+				Ready.push_back(Input.front());
+				Input.pop();
+			}
+		}
+
+		// f.
+		if (OActive == NULL)
+		{
+			// g.
+			if (!OActive.empty())
+			{
+				Ready.push_back(OActive.front());
+				OActive.pop();
+			}
+		}
+
+    TIMER++;
+
+		// h.
+		if ( TIMER % HOW_OFTEN)
+		{
+			// call prints
+			if (Active != NULL)
+			{
+				Active->print();
+			}
+			if (IActive != NULL)
+			{
+				IActive->print();
+			}
+			if (OActive != NULL)
+			{
+				OActive->print();
+			}
+
+			while (entryQueue)
+			{
+				entryQueue->front()->print();
+				entryQueue->pop();
+			}
+
+			while (Ready)
+			{
+				Ready->top()->print();
+				Ready->pop();
+			}
+
+			while (Input)
+			{
+				Input->top()->print();
+				Input->pop();
+			}
+
+			while (Output)
+			{
+				Output->top()->print();
+				Output->pop();
+			}
+
+		}
+
+  }
 
   return 0;
 

@@ -49,6 +49,16 @@ void Process::setArrivalTime(int arrivalTime)
   this->arrivalTime = arrivalTime;
 }
 
+void Process::setPID(int pid)
+{
+  this->processId = pid;
+}
+
+void Process::incrementSub()
+{
+  this->sub++;
+}
+
 Process::~Process()
 {
 }
@@ -56,12 +66,13 @@ Process::~Process()
 void Process::print()
 {
   cout << "\n";
-  cout << "-name: " << this->processName << endl;
-  cout << "-priority: " << this->priority << endl;
-  cout << "-arrivalTime: " << this->arrivalTime<< endl;
-  cout << "- History: " << endl;
+  cout << "Process:" << this->processName << endl;
+  cout << "priority: " << this->priority << endl;
+  cout << "arrivalTime: " << this->arrivalTime<< endl;
+  cout << "history: " << endl;
   for ( auto x : this->history)
   {
-    cout << "Letter: " << x.letter << " Value: " << x.value << endl;
+    cout << "-letter: " << x.letter << endl;
+    cout << "-value: " << x.value << endl;
   }
 }
