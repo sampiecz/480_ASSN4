@@ -197,6 +197,7 @@ int main()
   {
 		
 		// a.
+		cout << "a." << endl;
     if (entryQueue.size() < IN_PLAY)
     {
       if (entryQueue.front()->arrivalTime < timer)
@@ -205,6 +206,7 @@ int main()
       }
     }
 
+		cout << "b." << endl;
 		// b.
     if (Active == NULL)
     {
@@ -222,25 +224,32 @@ int main()
 		// c.
 		else
 		{
+			cout << "c. start" << endl;
 			if (Active->history[Active->sub].letter == "I")
 			{
+				cout << "c.I" << endl;
 				Input.push(Active);	
 			}
 			else if (Active->history[Active->sub].letter == "O")
 			{
+				cout << "c.O" << endl;
 				Output.push(Active);	
 			}
 			else if (Active->history[Active->sub].letter == "N")
 			{
+				cout << "c.O" << endl;
 				delete Active;
 				continue;
 			}
+			cout << "c. mid" << endl;
 			Active->incrementSub();
+			cout << "c. end" << endl;
 		}
 
 		// d.
 		if (IActive == NULL)
 		{
+			cout << "d." << endl;
 			if (!Input.empty())
 			{
 				IActive = Input.top();	
@@ -249,6 +258,7 @@ int main()
 		// e.
 		else	
 		{
+			cout << "e." << endl;
 			if (IActive->sub == 9)
 			{
 				Ready.push(IActive);
@@ -258,6 +268,7 @@ int main()
 		// f.
 		if (OActive == NULL)
 		{
+			cout << "f." << endl;
 			if (!Output.empty())
 			{
 				OActive = Output.top();
@@ -266,6 +277,7 @@ int main()
 		// g.
 		else 
 		{
+			cout << "g." << endl;
 			if (OActive->sub == 9)
 			{
 				Ready.push(OActive);
@@ -275,6 +287,7 @@ int main()
     timer++;
 
 		// h.
+		cout << "h." << endl;
 		if ( timer % HOW_OFTEN)
 		{
 			// call prints
