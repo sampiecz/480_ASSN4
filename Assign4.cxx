@@ -199,7 +199,7 @@ int main()
 		// a.
     if (entryQueue.size() < IN_PLAY)
     {
-      if (entryQueue.front()->arrivalTime > timer)
+      if (entryQueue.front()->arrivalTime < timer)
       {
         Ready.push(entryQueue.front());
       }
@@ -238,7 +238,7 @@ int main()
 		{
 			if (!Input.empty())
 			{
-				IActive = Input.front();	
+				IActive = Input.top();	
 			}
 		}
 		// e.
@@ -253,9 +253,9 @@ int main()
 		// f.
 		if (OActive == NULL)
 		{
-			if (!Output->empty())
+			if (!Output.empty())
 			{
-				OActive = Output.front();
+				OActive = Output.top();
 			}
 		}
 		// g.
@@ -300,14 +300,14 @@ int main()
 
 			while (!Input.empty())
 			{
-				Input->top()->print();
-				Input->pop();
+				Input.top()->print();
+				Input.pop();
 			}
 
 			while (!Output.empty())
 			{
-				Output->top()->print();
-				Output->pop();
+				Output.top()->print();
+				Output.pop();
 			}
 
 		}
