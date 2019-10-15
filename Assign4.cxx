@@ -182,9 +182,9 @@ int main()
   priority_queue<Process*> Ready;
   priority_queue<Process*> Input;
   priority_queue<Process*> Output;
-  Process* Active;
-  Process* IActive;
-  Process* OActive;
+  Process* Active = NULL;
+  Process* IActive = NULL;
+  Process* OActive = NULL;
   int timer = 0;
   int processesInUse = 0;
 
@@ -197,26 +197,30 @@ int main()
   {
 		
 		// a.
-		cout << "a." << endl;
-    if (entryQueue.size() < IN_PLAY)
+    cout << "a." << endl;
+    if (processesInUse < IN_PLAY)
     {
+      cout << "a.0" << endl;
       if (entryQueue.front()->arrivalTime < timer)
       {
+        cout << "a.1" << endl;
         Ready.push(entryQueue.front());
       }
     }
 
-		cout << "b." << endl;
 		// b.
     if (Active == NULL)
     {
+      cout << "b." << endl;
       if (Ready.empty())
       {
+        cout << "b.0" << endl;
 				timer++;
 			  continue;	
       }
 			else
 			{
+        cout << "b.1" << endl;
 				Active = Ready.top();
 				Ready.pop();
 			}
@@ -224,26 +228,31 @@ int main()
 		// c.
 		else
 		{
-			cout << "c. start" << endl;
+			cout << "c." << endl;
+			Active->print();
+			cout << "c.0" << endl;
 			if (Active->history[Active->sub].letter == "I")
 			{
 				cout << "c.I" << endl;
 				Input.push(Active);	
+        processesInUse++;
 			}
 			else if (Active->history[Active->sub].letter == "O")
 			{
 				cout << "c.O" << endl;
 				Output.push(Active);	
+        processesInUse++;
 			}
 			else if (Active->history[Active->sub].letter == "N")
 			{
-				cout << "c.O" << endl;
+				cout << "c.N" << endl;
 				delete Active;
+        processesInUse--;
 				continue;
 			}
-			cout << "c. mid" << endl;
+			cout << "c.1" << endl;
 			Active->incrementSub();
-			cout << "c. end" << endl;
+			cout << "c.2" << endl;
 		}
 
 		// d.
@@ -252,6 +261,7 @@ int main()
 			cout << "d." << endl;
 			if (!Input.empty())
 			{
+        cout << "d.0" << endl;
 				IActive = Input.top();	
 			}
 		}
@@ -261,6 +271,7 @@ int main()
 			cout << "e." << endl;
 			if (IActive->sub == 9)
 			{
+        cout << "e.0" << endl;
 				Ready.push(IActive);
 			}
 		}
@@ -271,15 +282,17 @@ int main()
 			cout << "f." << endl;
 			if (!Output.empty())
 			{
+        cout << "f.0" << endl;
 				OActive = Output.top();
 			}
 		}
-		// g.
 		else 
 		{
+		// g.
 			cout << "g." << endl;
 			if (OActive->sub == 9)
 			{
+        cout << "g.0" << endl;
 				Ready.push(OActive);
 			}
 		}
@@ -290,40 +303,48 @@ int main()
 		cout << "h." << endl;
 		if ( timer % HOW_OFTEN)
 		{
+      cout << "h.0" << endl;
 			// call prints
 			if (Active != NULL)
 			{
+        cout << "h.1" << endl;
 				Active->print();
 			}
 			if (IActive != NULL)
 			{
+        cout << "h.2" << endl;
 				IActive->print();
 			}
 			if (OActive != NULL)
 			{
+        cout << "h.4" << endl;
 				OActive->print();
 			}
 
 			while (!entryQueue.empty())
 			{
+        cout << "h.5" << endl;
 				entryQueue.front()->print();
 				entryQueue.pop();
 			}
 
 			while (!Ready.empty())
 			{
+        cout << "h.6" << endl;
 				Ready.top()->print();
 				Ready.pop();
 			}
 
 			while (!Input.empty())
 			{
+        cout << "h.7" << endl;
 				Input.top()->print();
 				Input.pop();
 			}
 
 			while (!Output.empty())
 			{
+        cout << "h.8" << endl;
 				Output.top()->print();
 				Output.pop();
 			}
