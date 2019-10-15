@@ -213,6 +213,11 @@ int main()
 				timer++;
 			  continue;	
       }
+			else
+			{
+				Active = Ready.top();
+				Ready.pop();
+			}
     }
 		// c.
 		else
