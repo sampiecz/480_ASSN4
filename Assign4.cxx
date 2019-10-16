@@ -1,12 +1,12 @@
 /***********************************************************
-CSCI 480 - Assignment 4 - Fall 2019
+  CSCI 480 - Assignment 4 - Fall 2019
 
 Progammer: Sam Piecz
 Z-ID: Z1732715
 Section: 2 
 TA: Jingwan Li  
 Date Due: Oct 11, 2019 Purpose: Priority Scheduling Simulation. 
-************************************************************/
+ ************************************************************/
 #include "Process.h"
 #include <iostream>
 #include <fstream>
@@ -32,14 +32,13 @@ using std::priority_queue;
 
 vector<string> stringToVector(const string& str)
 {
-  string buf;                 // Have a buffer string
-  stringstream ss(str);       // Insert the string into a stream
-  vector<string> tokens; // Create vector to hold our words
+  string buf;                 
+  stringstream ss(str);
+  vector<string> tokens;
   while (ss >> buf)
   {
     tokens.push_back(buf);
   }
-
   return tokens;
 }
 
@@ -107,11 +106,11 @@ vector<Process*> processFile(const string& filename)
           count++;
         }
 
-				// Create new process and set vars
+        // Create new process and set vars
         Process* theProcess = new Process(); 
-				theProcess->setName(theName);
-				theProcess->setPriority(stoi(thePriority));
-				theProcess->setArrivalTime(stoi(theArrivalTime));
+        theProcess->setName(theName);
+        theProcess->setPriority(stoi(thePriority));
+        theProcess->setArrivalTime(stoi(theArrivalTime));
         theProcess->setPID(processCount);
         processes.push_back(theProcess);
         processCount++;
@@ -185,18 +184,22 @@ int main()
   Process* Active = NULL;
   Process* IActive = NULL;
   Process* OActive = NULL;
+  bool cool = true;
   int timer = 0;
   int processesInUse = 0;
 
 
   // Process file, generate processes, and pack into queue.
   entryQueue = loadQueue(processFile("data4.txt"));
-		
+
   // 3. 
-  while(timer < MAX_TIME)
+  while(timer < MAX_TIME && cool)
   {
-		
-		// a.
+    cout << "*************************************" << endl;
+    cout << "ITERATION" << endl;
+    cout << "*************************************" << endl;
+
+    // a.
     cout << "a." << endl;
     if (processesInUse < IN_PLAY)
     {
@@ -208,149 +211,158 @@ int main()
       }
     }
 
-		// b.
+    // b.
     if (Active == NULL)
     {
       cout << "b." << endl;
       if (Ready.empty())
       {
         cout << "b.0" << endl;
-				timer++;
-			  continue;	
+        timer++;
+        continue;	
       }
-			else
-			{
+      else
+      {
         cout << "b.1" << endl;
-				Active = Ready.top();
-				Ready.pop();
-			}
+        Active = Ready.top();
+        Ready.pop();
+      }
     }
-		// c.
-		else
-		{
-			cout << "c." << endl;
-			Active->print();
-			cout << "c.0" << endl;
-			if (Active->history[Active->sub].letter == "I")
-			{
-				cout << "c.I" << endl;
-				Input.push(Active);	
+    // c.
+    else
+    {
+      cout << "c." << endl;
+      Active->print();
+      cout << "c.0" << endl;
+      if (Active->history[Active->sub].letter == "I")
+      {
+        cout << "c.I" << endl;
+        Input.push(Active);	
         processesInUse++;
-			}
-			else if (Active->history[Active->sub].letter == "O")
-			{
-				cout << "c.O" << endl;
-				Output.push(Active);	
+      }
+      else if (Active->history[Active->sub].letter == "O")
+      {
+        cout << "c.O" << endl;
+        Output.push(Active);	
         processesInUse++;
-			}
-			else if (Active->history[Active->sub].letter == "N")
-			{
-				cout << "c.N" << endl;
-				delete Active;
+      }
+      else if (Active->history[Active->sub].letter == "N")
+      {
+        cout << "c.N" << endl;
+        delete Active;
         processesInUse--;
-				continue;
-			}
-			cout << "c.1" << endl;
-			Active->incrementSub();
-			cout << "c.2" << endl;
-		}
+        continue;
+      }
+      cout << "c.1" << endl;
+      Active->incrementSub();
+      cout << "c.2" << endl;
+    }
 
-		// d.
-		if (IActive == NULL)
-		{
-			cout << "d." << endl;
-			if (!Input.empty())
-			{
+    // d.
+    if (IActive == NULL)
+    {
+      cout << "d." << endl;
+      if (!Input.empty())
+      {
         cout << "d.0" << endl;
-				IActive = Input.top();	
-			}
-		}
-		// e.
-		else	
-		{
-			cout << "e." << endl;
-			if (IActive->sub == 9)
-			{
+        IActive = Input.top();	
+      }
+    }
+    // e.
+    else	
+    {
+      cout << "e." << endl;
+      if (IActive->sub == 9)
+      {
         cout << "e.0" << endl;
-				Ready.push(IActive);
-			}
-		}
+        Ready.push(IActive);
+      }
+    }
 
-		// f.
-		if (OActive == NULL)
-		{
-			cout << "f." << endl;
-			if (!Output.empty())
-			{
+    // f.
+    if (OActive == NULL)
+    {
+      cout << "f." << endl;
+      if (!Output.empty())
+      {
         cout << "f.0" << endl;
-				OActive = Output.top();
-			}
-		}
-		else 
-		{
-		// g.
-			cout << "g." << endl;
-			if (OActive->sub == 9)
-			{
+        OActive = Output.top();
+      }
+    }
+    else 
+    {
+      // g.
+      cout << "g." << endl;
+      if (OActive->sub == 9)
+      {
         cout << "g.0" << endl;
-				Ready.push(OActive);
-			}
-		}
+        Ready.push(OActive);
+      }
+    }
 
     timer++;
 
-		// h.
-		cout << "h." << endl;
-		if ( timer % HOW_OFTEN)
-		{
-      cout << "h.0" << endl;
-			// call prints
-			if (Active != NULL)
-			{
+    // h.
+    cout << "h." << endl;
+    if ( timer % HOW_OFTEN)
+    {
+
+      cout << "System Timer: " << timer << endl;
+
+      if (Active != NULL)
+      {
         cout << "h.1" << endl;
-				Active->print();
-			}
-			if (IActive != NULL)
-			{
+        Active->print();
+      }
+      if (IActive != NULL)
+      {
         cout << "h.2" << endl;
-				IActive->print();
-			}
-			if (OActive != NULL)
-			{
+        IActive->print();
+      }
+      if (OActive != NULL)
+      {
         cout << "h.4" << endl;
-				OActive->print();
-			}
+        OActive->print();
+      }
 
-			while (!entryQueue.empty())
-			{
+      queue<Process*> printEntryQueue(entryQueue);
+      while (!printEntryQueue.empty())
+      {
         cout << "h.5" << endl;
-				entryQueue.front()->print();
-				entryQueue.pop();
-			}
+        printEntryQueue.front()->print();
+        printEntryQueue.pop();
+      }
 
-			while (!Ready.empty())
-			{
+      priority_queue<Process*> printReadyQueue(Ready);
+      while (!printReadyQueue.empty())
+      {
         cout << "h.6" << endl;
-				Ready.top()->print();
-				Ready.pop();
-			}
+        printReadyQueue.top()->print();
+        printReadyQueue.pop();
+      }
 
-			while (!Input.empty())
-			{
+      priority_queue<Process*> printInputQueue(Input);
+      while (!printInputQueue.empty())
+      {
         cout << "h.7" << endl;
-				Input.top()->print();
-				Input.pop();
-			}
+        printInputQueue.top()->print();
+        printInputQueue.pop();
+      }
 
-			while (!Output.empty())
-			{
+      priority_queue<Process*> printOutputQueue(Output);
+      while (!printOutputQueue.empty())
+      {
         cout << "h.8" << endl;
-				Output.top()->print();
-				Output.pop();
-			}
+        printOutputQueue.top()->print();
+        printOutputQueue.pop();
+      }
 
-		}
+    }
 
+    if (Active == NULL && OActive == NULL && IActive == NULL && entryQueue.empty() && Ready.empty() && Input.empty() && Output.empty())
+    {
+      cool = false;
+    }
   }
 
   return 0;
