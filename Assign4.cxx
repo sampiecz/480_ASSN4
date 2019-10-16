@@ -192,7 +192,7 @@ int main()
   // Process file, generate processes, and pack into queue.
   entryQueue = loadQueue(processFile("data4.txt"));
 
-  // 3. 
+  // Iterate over entry queue
   while(timer < MAX_TIME && cool)
   {
     cout << "*************************************" << endl;
@@ -300,14 +300,18 @@ int main()
       }
     }
 
-    timer++;
-
-    // h.
-    cout << "h." << endl;
-    if ( timer % HOW_OFTEN)
+    // Prints all queues and pointers to processes  
+    if (timer % HOW_OFTEN == 0)
     {
 
+
+      cout << "****************" << endl;
       cout << "System Timer: " << timer << endl;
+      cout << "****************" << endl;
+
+      cout << "-=-=-=-=-=-=-=-" << endl; 
+      cout << "Process Pointers" << endl;
+      cout << "-=-=-=-=-=-=-=-" << endl; 
 
       if (Active != NULL)
       {
@@ -324,6 +328,10 @@ int main()
         cout << "h.4" << endl;
         OActive->print();
       }
+
+      cout << "-=-=-=-=-=-=-=-" << endl; 
+      cout << "Queues         " << endl;
+      cout << "-=-=-=-=-=-=-=-" << endl; 
 
       queue<Process*> printEntryQueue(entryQueue);
       while (!printEntryQueue.empty())
@@ -359,10 +367,18 @@ int main()
 
     }
 
+
+    timer++;
+
+    // Stops program
     if (Active == NULL && OActive == NULL && IActive == NULL && entryQueue.empty() && Ready.empty() && Input.empty() && Output.empty())
     {
+      cout << "################################" << endl;
+      cout << "Final Message. Run has ended." << endl;
+      cout << "################################" << endl;
       cool = false;
     }
+
   }
 
   return 0;
